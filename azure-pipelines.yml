@@ -1,11 +1,11 @@
 trigger:
 - main 
 pool:
-  name: 'ubuntu-latest' 
+  name: 'Default' 
 
 steps:
-- task: Bash@3
+- task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
-      echo "Hello, World!"
+      Write-Host "Hello, World!"
