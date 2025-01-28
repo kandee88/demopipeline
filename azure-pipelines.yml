@@ -8,4 +8,4 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      Write-Host "Hello, World!"
+      Write-Host "Hello, World demo!"
