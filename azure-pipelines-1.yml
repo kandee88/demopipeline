@@ -10,7 +10,7 @@ pr:
       - master
 
 pool:
-  vmImage: Default
+   name: 'Default'
 
 stages:
   - stage: 'Junit'
