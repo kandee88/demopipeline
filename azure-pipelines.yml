@@ -1,15 +1,32 @@
 trigger:
-- main 
-pool:
-  name: 'Default' 
+- main  # Trigger on changes to the main branch
 
-pr:
-  branches:
-    include:
-      - main
-steps:
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      Write-Host "Hello, World demo!"
+pool:
+  name: 'Default'  # Use your self-hosted agent pool here
+
+jobs:
+- job: CopyFileToArtifact
+  steps:
+  - script: |
+      echo "Copying the file from local path to artifact location"
+      # Define the source file path (adjust based on your setup)
+      $sourceFile = F:\JAVA\TrainingDocuments\test.txt"
+      $destinationDir = "$(Build.ArtifactStagingDirectory)\artifact"
+      
+      # Ensure the destination directory exists
+      if (-Not (Test-Path -Path $destinationDir)) {
+        New-Item -Path $destinationDir -ItemType Directory
+      }
+      
+      # Copy the file
+      Copy-Item -Path $sourceFile -Destination $destinationDir -Force
+      
+      # Confirm file has been copied
+      Write-Host "File copied to: $destinationDir"
+    displayName: 'Copy File to Artifact Staging Directory'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: '$(Build.ArtifactStagingDirectory)\artifact'  # Publish the file from the staging directory
+      artifactName: 'artifact'  # Name the artifact
+      publishLocation: 'Container'  # Store the artifact in Azure DevOps pipeline artifacts
