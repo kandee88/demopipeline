@@ -47,7 +47,7 @@ stages:
             sonarQubeRunAnalysis: false
         - task: CopyFiles@2
           inputs:
-            SourceFolder: '$(agent.builddirectory)'
+            SourceFolder: '$(agent.builddirectory)/s/target'
             Contents: '*.jar'
             TargetFolder: '$(build.artifactstagingdirectory'
             CleanTargetFolder: true
