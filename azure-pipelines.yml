@@ -7,17 +7,15 @@ pool:
   name: Default
 
 steps:
-# Step 1: Install Java (OpenJDK 11 in this case)
-- script: |
-    sudo apt update
-    sudo apt install -y openjdk-11-jdk
-    java -version  # Verify that Java is installed successfully
-  displayName: 'Install OpenJDK 11'
 
 # Step 2: Run Maven build
-- task: Maven@3
+- task: Maven@1
   inputs:
-    mavenPomFile: 'pom.xml'  # Path to your Maven POM file
-    goals: 'clean install'  # Maven goals (clean and install)
-    options: '-DskipTests=true'  # Skip tests (optional, remove if you want to run tests)
-  displayName: 'Build with Maven'
+    mavenPomFile: 'pom.xml'
+    goals: 'clean install'
+    options: '-DskipTests=true'
+    publishJUnitResults: false
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: true
+    sonarQubeRunAnalysis: false
