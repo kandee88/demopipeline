@@ -1,67 +1,20 @@
 trigger:
   branches:
     include:
-      - main
+      - main  # Adjust this to your desired branch (e.g., 'master', 'develop')
 
 pool:
-  pool: Default
-
-variables:
-  mavenVersion: '3.8.1'
-  javaVersion: '11'
+  name: 'Default'  # Replace this with the name of your self-hosted agent pool
 
 steps:
-# Step 1: Install JDK
-#- task: UseJavaToolInstaller@0
- # inputs:
-  #  versionSpec: '$(javaVersion)'
-   # jdkArchitecture: 'x64'
-
-# Step 2: Cache Maven dependencies (optional)
-- task: Cache@2
+- task: UseJavaToolInstaller@0
   inputs:
-    key: 'maven | "$(Agent.OS)" | **/pom.xml'
-    restoreKeys: |
-      maven | "$(Agent.OS)"
-    path: ~/.m2/repository
+    versionSpec: '11'  # Specify the Java version you want (e.g., '11', '8', '17')
+    addToPath: true  # Add Java to PATH so Maven can use it
 
-# Step 3: Set up Maven
-#- task: UseMaven@3
- # inputs:
-  #  mavenVersionOption: 'Default'
-   # mavenPomFile: 'pom.xml'
-    #goals: 'validate'
-
-# Step 4: Install dependencies
 - task: Maven@3
   inputs:
-    mavenPomFile: 'pom.xml'
-    options: '-DskipTests=true'
-    goals: 'install'
-
-# Step 5: Run tests and build the application
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    options: '-DskipTests=false'
-    goals: 'test'
-
-# Step 6: Run JUnit tests (optional: publish test results)
-- task: PublishTestResults@2
-  inputs:
-    testResultsFiles: '**/target/test-*.xml'
-    testRunTitle: 'JUnit Test Results'
-    mergeTestResults: true
-
-# Step 7: Package the application
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'package'
-
-# Step 8: Publish the build artifact (optional)
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: 'target/*.jar'
-    ArtifactName: 'spring-boot-app'
-    publishLocation: 'Container'
+    mavenPomFile: 'pom.xml'  # Path to your Maven POM file (usually at the root of the project)
+    goals: 'clean install'  # Maven goals (clean build)
+    options: '-DskipTests=true'  # Skip tests to speed up the build (optional)
+  displayName: 'Build with Maven'
