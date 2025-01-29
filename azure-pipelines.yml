@@ -49,7 +49,7 @@ stages:
           inputs:
             SourceFolder: '$(agent.builddirectory)/s/target'
             Contents: '*.jar'
-            TargetFolder: '$(build.artifactstagingdirectory'
+            TargetFolder: '$(build.artifactstagingdirectory)'
             CleanTargetFolder: true
             OverWrite: true
 
