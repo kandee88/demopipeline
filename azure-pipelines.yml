@@ -1,20 +1,23 @@
 trigger:
   branches:
     include:
-      - main  # Adjust this to your desired branch (e.g., 'master', 'develop')
+      - main  # Specify the branch to trigger the pipeline
 
 pool:
-  name: 'Default'  # Replace this with the name of your self-hosted agent pool
+  name: 'Default'  # Use your self-hosted agent pool here
 
 steps:
-- task: UseJavaToolInstaller@0
-  inputs:
-    versionSpec: '11'  # Specify the Java version you want (e.g., '11', '8', '17')
-    addToPath: true  # Add Java to PATH so Maven can use it
+# Step 1: Install Java (OpenJDK 11 in this case)
+- script: |
+    sudo apt update
+    sudo apt install -y openjdk-11-jdk
+    java -version  # Verify that Java is installed successfully
+  displayName: 'Install OpenJDK 11'
 
+# Step 2: Run Maven build
 - task: Maven@3
   inputs:
-    mavenPomFile: 'pom.xml'  # Path to your Maven POM file (usually at the root of the project)
-    goals: 'clean install'  # Maven goals (clean build)
-    options: '-DskipTests=true'  # Skip tests to speed up the build (optional)
+    mavenPomFile: 'pom.xml'  # Path to your Maven POM file
+    goals: 'clean install'  # Maven goals (clean and install)
+    options: '-DskipTests=true'  # Skip tests (optional, remove if you want to run tests)
   displayName: 'Build with Maven'
