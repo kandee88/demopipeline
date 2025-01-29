@@ -61,7 +61,7 @@ stages:
             containerRegistry: 'dockerhub'
             repository: 'yuvisha/azuredevopsdemo'
             command: 'buildAndPush'
-            Dockerfile: '$(build.artifactstagingdirectory)/../s/cicd/docker/Dockerfile'
+            Dockerfile: '$(build.artifactstagingdirectory)/../s/cicd/docker/DockerFile'
 
       
     
