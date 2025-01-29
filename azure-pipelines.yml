@@ -54,14 +54,14 @@ stages:
           inputs:
             SourceFolder: 'drop'
             Contents: '*.jar'
-            TargetFolder: '$(build.artifactstagingdirectory)/s/cicd/drop'
+            TargetFolder: '$(build.artifactstagingdirectory)/s/cicd/docker/drop'
             
         - task: Docker@2
           inputs:
             containerRegistry: 'dockerhub'
             repository: 'yuvisha/azuredevopsdemo'
             command: 'buildAndPush'
-            Dockerfile: '$(build.artifactstagingdirectory)/1/s/cicd/docker/Dockerfile'
+            Dockerfile: '$(build.artifactstagingdirectory)/s/cicd/docker/Dockerfile'
 
       
     
