@@ -14,17 +14,19 @@ stages:
         displayName: 'Running unit tests'
         steps:
           - script: echo 'Running the spring demo'
-          - task: Maven@1
+          - task: Maven@4
             inputs:
               mavenPomFile: 'pom.xml'
               goals: 'test'
               publishJUnitResults: true
-              testResultsFiles: '**/TEST-*.xml'
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
               codeCoverageToolOption: 'JaCoCo'
               javaHomeOption: 'JDKVersion'
               mavenVersionOption: 'Default'
-              mavenAuthenticateFeed: true
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
               sonarQubeRunAnalysis: false
               checkStyleRunAnalysis: true
               pmdRunAnalysis: true
+          
   
