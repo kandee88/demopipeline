@@ -5,22 +5,20 @@ trigger:
 
 pool:
   name: Default
-
 stages:
   - stage: 'Junit'
     displayName: 'Junit Stage'
     jobs:
-      - job: 'JunitTest'
-        displayName: 'Running unit tests'
+      - job: 'JuniTest'
+        displayName: 'Runinning junit test'
         steps:
-          - script: echo 'Running the spring demo'
+          - script: echo 'running the junit test'
           - task: Maven@4
             inputs:
               mavenPomFile: 'pom.xml'
               goals: 'test'
               publishJUnitResults: true
               testResultsFiles: '**/surefire-reports/TEST-*.xml'
-              codeCoverageToolOption: 'JaCoCo'
               javaHomeOption: 'JDKVersion'
               mavenVersionOption: 'Default'
               mavenAuthenticateFeed: false
@@ -28,5 +26,14 @@ stages:
               sonarQubeRunAnalysis: false
               checkStyleRunAnalysis: true
               pmdRunAnalysis: true
-          
-  
+           
+      
+    
+
+      
+     
+    
+
+    
+      
+    
