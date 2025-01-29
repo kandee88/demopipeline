@@ -12,10 +12,10 @@ variables:
 
 steps:
 # Step 1: Install JDK
-- task: UseJavaToolInstaller@0
-  inputs:
-    versionSpec: '$(javaVersion)'
-    jdkArchitecture: 'x64'
+#- task: UseJavaToolInstaller@0
+ # inputs:
+  #  versionSpec: '$(javaVersion)'
+   # jdkArchitecture: 'x64'
 
 # Step 2: Cache Maven dependencies (optional)
 - task: Cache@2
@@ -26,11 +26,11 @@ steps:
     path: ~/.m2/repository
 
 # Step 3: Set up Maven
-- task: UseMaven@3
-  inputs:
-    mavenVersionOption: 'Default'
-    mavenPomFile: 'pom.xml'
-    goals: 'validate'
+#- task: UseMaven@3
+ # inputs:
+  #  mavenVersionOption: 'Default'
+   # mavenPomFile: 'pom.xml'
+    #goals: 'validate'
 
 # Step 4: Install dependencies
 - task: Maven@3
