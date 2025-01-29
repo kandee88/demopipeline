@@ -4,7 +4,7 @@ trigger:
       - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  pool: Default
 
 variables:
   mavenVersion: '3.8.1'
