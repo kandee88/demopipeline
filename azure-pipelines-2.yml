@@ -1,0 +1,38 @@
+trigger:
+- main  # Or the branch you want to trigger the pipeline on
+
+pool:
+  vmImage: Default
+
+variables:
+  # Azure Artifacts feed and project information
+  feedName: pom.xmlCopyFeed          # Replace with your Azure Artifacts feed name
+  organization: sathyapublic     # Replace with your Azure DevOps organization name
+  projectName: demopublic           # Replace with your Azure DevOps project name
+  zipFileName: 'pom.xml.zip'            # The name of the zip file we'll create
+
+steps:
+# Step 1: Checkout the code (including pom.xml)
+- task: Checkout@1
+  displayName: 'Checkout Code'
+
+# Step 2: Archive pom.xml into a zip file
+- task: ArchiveFiles@2
+  displayName: 'Archive pom.xml into zip file'
+  inputs:
+    rootFolderOrFile: 'pom.xml'        # Path to your pom.xml file
+    includeRootFolder: false           # Don't include root folder in the zip file
+    archiveFile: $(Build.ArtifactStagingDirectory)/$(zipFileName)  # Output zip file path
+
+# Step 3: Install NuGet (Required for interacting with Azure Artifacts)
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: '5.x'  # Install NuGet tool
+  displayName: 'Install NuGet'
+
+# Step 4: Push the zip file containing pom.xml to Azure Artifacts feed
+- script: |
+    echo "Publishing pom.xml.zip to Azure Artifacts feed"
+    # Push the zip file as a NuGet package to Azure Artifacts feed
+    nuget push $(Build.ArtifactStagingDirectory)/$(zipFileName) -Source "https://pkgs.dev.azure.com/$(organization)/_packaging/$(feedName)/nuget/v3/index.json" -ApiKey "AzureDevOps"
+  displayName: 'Upload pom.xml.zip to Azure Artifacts feed'
