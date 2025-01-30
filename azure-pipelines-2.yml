@@ -6,9 +6,9 @@ pool:
 
 variables:
   # Azure Artifacts feed and project information
-  feedName: pom.xmlCopyFeed          # Replace with your Azure Artifacts feed name
-  organization: sathyapublic     # Replace with your Azure DevOps organization name
-  projectName: demopublic           # Replace with your Azure DevOps project name
+  feedName: 'pom.xmlCopyFeed'          # Replace with your Azure Artifacts feed name
+  organization: 'sathyapublic'     # Replace with your Azure DevOps organization name
+  projectName: 'demopublic'           # Replace with your Azure DevOps project name
   zipFileName: 'pom.xml.zip'            # The name of the zip file we'll create
 
 steps:
