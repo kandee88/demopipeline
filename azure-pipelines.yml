@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - main  # Specify the branch to trigger the pipeline
+      - master  # Specify the branch to trigger the pipeline
 
 pool:
   name: Default
