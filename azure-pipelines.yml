@@ -1,86 +1,11 @@
-trigger:
-  branches:
-    include:
-      - master  # Specify the branch to trigger the pipeline
-
+trigger: 
+- main
 pool:
-  name: Default
+  name: 'Default'
 
-stages:
-  - stage: 'Junit'
-    displayName: 'Running Junit as stage 1'
-    jobs:
-      - job: 'JunitTest'
-        displayName: 'Running junit test'
-        steps:
-          - script: echo 'running the test'
-          - task: Maven@4
-            inputs:
-              mavenPomFile: 'pom.xml'
-              goals: 'test'
-              publishJUnitResults: true
-              testResultsFiles: '**/surefire-reports/TEST-*.xml'
-              javaHomeOption: 'JDKVersion'
-              mavenVersionOption: 'Default'
-              mavenAuthenticateFeed: false
-              effectivePomSkip: false
-              sonarQubeRunAnalysis: false
-              checkStyleRunAnalysis: true
-              pmdRunAnalysis: true
-  - stage: 'BuildArtifact'
-    displayName: 'Building artifact stage'
-    jobs:
-      - job: 'BuildArtifact'
-        displayName: 'Build ARtifact'
-        steps:
-        - task: Maven@4
-          inputs:
-            mavenPomFile: 'pom.xml'
-            goals: 'clean package'
-            options: '--no-transfer-progress'
-            publishJUnitResults: true
-            testResultsFiles: '**/surefire-reports/TEST-*.xml'
-            javaHomeOption: 'JDKVersion'
-            mavenVersionOption: 'Default'
-            mavenAuthenticateFeed: false
-            effectivePomSkip: false
-            sonarQubeRunAnalysis: false
-        - task: CopyFiles@2
-          inputs:
-            SourceFolder: '$(agent.builddirectory)/s/target'
-            Contents: '*.jar'
-            TargetFolder: '$(build.artifactstagingdirectory)'
-            CleanTargetFolder: true
-            OverWrite: true
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'drop'
-            publishLocation: 'Container'
-  - stage: 'Dcokering'
-    displayName: 'Dockerizing'
-    jobs:
-      - job: 'CreateDockerImage'
-        displayName: 'Build and publish Docker Image'
-        steps:
-        - task: DownloadBuildArtifacts@0
-          inputs:
-            buildType: 'current'
-            downloadType: 'single'
-            artifactName: 'drop'
-            downloadPath: '$(System.ArtifactsDirectory)'
-        - task: CopyFiles@2
-          inputs:
-            SourceFolder: 'drop'
-            Contents: '*.jar'
-            TargetFolder: '$(build.artifactstagingdirectory)/s/cicd/drop'
-        - task: Docker@2
-          inputs:
-            containerRegistry: 'dockerhub'
-            repository: 'yuvisha/azuredevopsdemo'
-            command: 'buildAndPush'
-            Dockerfile: '**/Dockerfile'
-
-
-      
-  
+steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Hello, World demo!"
