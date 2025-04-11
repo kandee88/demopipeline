@@ -2,10 +2,24 @@ trigger:
 - main
 pool:
   name: 'Default'
+stages:
+  - stage: 'Junit'
+    displayName: 'Running Junit as Stage 1'
+    jobs:
+      - job: 'JunitTest'
+        displayName: 'Running junit test'
+        steps:
+          - script: echo 'running the test'
+          - task: Maven@4
+            inputs:
+              mavenPomFile: 'pom.xml'
+              goals: 'test'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
 
-steps:
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      Write-Host "Hello, World demo!"
+
