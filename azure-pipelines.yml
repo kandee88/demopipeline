@@ -21,5 +21,37 @@ stages:
               mavenAuthenticateFeed: false
               effectivePomSkip: false
               sonarQubeRunAnalysis: false
+  - stage: 'BuildArtifact'
+    displayName: 'Building artifact stage'
+    jobs:
+      - job: 'BuildArtifact'
+        displayName: 'Build Artifact'
+        steps:
+        - task: Maven@4
+          inputs:
+            mavenPomFile: 'pom.xml'
+            goals: 'clear package'
+            options: '--no transfer -progress'
+            publishJUnitResults: true
+            testResultsFiles: '**/surefire-reports/TEST-*.xml'
+            javaHomeOption: 'JDKVersion'
+            mavenVersionOption: 'Default'
+            mavenAuthenticateFeed: false
+            effectivePomSkip: false
+            sonarQubeRunAnalysis: false
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(agent.builddirectory)/s/target'
+            Contents: '**'
+            TargetFolder: '$(build.artifactstagingdirectory)'
+            CleanTargetFolder: true
+            OverWrite: true
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
+
+
 
 
